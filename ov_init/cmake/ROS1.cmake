@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 
 # Find ROS build system
+SET(cv_bridge_DIR /home/lin/develop/ros/ros_ws/devel/share/cv_bridge/cmake/)
 find_package(catkin QUIET COMPONENTS roscpp ov_core)
 
 # Describe ROS project
