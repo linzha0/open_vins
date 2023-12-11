@@ -142,6 +142,7 @@ bool VioManager::try_to_initialize(const ov_core::CameraData &message) {
       PRINT_INFO(GREEN "[init]: bias accel = %.4f, %.4f, %.4f\n" RESET, state->_imu->bias_a()(0), state->_imu->bias_a()(1),
                  state->_imu->bias_a()(2));
       PRINT_INFO(GREEN "[init]: position = %.4f, %.4f, %.4f\n" RESET, state->_imu->pos()(0), state->_imu->pos()(1), state->_imu->pos()(2));
+      PRINT_INFO(GREEN "[init]: timestamp = %.9f\n" RESET, state->_timestamp);
 
       // Remove any camera times that are order then the initialized time
       // This can happen if the initialization has taken a while to perform
