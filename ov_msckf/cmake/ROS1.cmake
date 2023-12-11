@@ -160,3 +160,13 @@ install(TARGETS test_sim_repeat
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+############################################################################
+#####                             Test                                 #####
+############################################################################
+add_executable(test_sim_vio_data test/cpp/sim_vio_data.cpp)
+target_link_libraries(test_sim_vio_data ov_msckf_lib ${thirdparty_libraries})
+install(TARGETS test_sim_vio_data
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
