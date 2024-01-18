@@ -80,6 +80,7 @@ endif ()
 list(APPEND LIBRARY_SOURCES
         src/dummy.cpp
         src/sim/Simulator.cpp
+        src/sim/SimulatorUnderwater.cpp
         src/state/State.cpp
         src/state/StateHelper.cpp
         src/state/Propagator.cpp
@@ -166,6 +167,14 @@ install(TARGETS test_sim_repeat
 add_executable(test_sim_vio_data test/cpp/sim_vio_data.cpp)
 target_link_libraries(test_sim_vio_data ov_msckf_lib ${thirdparty_libraries})
 install(TARGETS test_sim_vio_data
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+add_executable(test_sim_avio_data test/cpp/sim_avio_data.cpp)
+target_link_libraries(test_sim_avio_data ov_msckf_lib ${thirdparty_libraries})
+install(TARGETS test_sim_avio_data
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

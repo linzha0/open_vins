@@ -1,0 +1,10 @@
+%YAML:1.0
+
+# FLS
+fls:
+  T_imu_fls: # transform: rotation from FLS to IMU R_StoI, position of FLS in IMU p_SinI
+    - [1.0, 0.0, 0.0, 0.0]
+    - [0.0, 1.0, 0.0, 0.0]
+    - [0.0, 0.0, 1.0, 0.0]
+    - [0.0, 0.0, 0.0, 1.0]  
+  timeshift_fls_imu: 0.0

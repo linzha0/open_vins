@@ -219,6 +219,12 @@ struct VioManagerOptions {
   /// Mask images for each camera
   std::map<size_t, cv::Mat> masks;
 
+  /// Time offset between FLS and IMU.
+  double calib_flsimu_dt = 0.0;
+
+  // FLS extrinsics (q_ItoS, p_IinS)
+  Eigen::VectorXd fls_extrinsics;
+
   /**
    * @brief This function will load and print all state parameters (e.g. sensor extrinsics)
    * This allows for visual checking that everything was loaded properly from ROS/CMD parsers.
@@ -301,6 +307,17 @@ struct VioManagerOptions {
           }
         }
       }
+
+      // FLS
+      parser->parse_external("relative_config_imufls", "fls", "timeshift_fls_imu", calib_flsimu_dt, false);
+      // Extrinsics
+      Eigen::Matrix4d T_StoI = Eigen::Matrix4d::Identity();
+      parser->parse_external("relative_config_imufls", "fls", "T_imu_fls", T_StoI);
+
+      Eigen::Matrix<double, 7, 1> cam_eigen;
+      cam_eigen.block(0, 0, 4, 1) = ov_core::rot_2_quat(T_StoI.block(0, 0, 3, 3).transpose());
+      cam_eigen.block(4, 0, 3, 1) = -T_StoI.block(0, 0, 3, 3).transpose() * T_StoI.block(0, 3, 3, 1);
+      fls_extrinsics = cam_eigen;
 
       // IMU intrinsics
       Eigen::Matrix3d Tw = Eigen::Matrix3d::Identity();
@@ -388,6 +405,14 @@ struct VioManagerOptions {
     ss << "Tg (columnwise):" << vec_tg.transpose() << std::endl;
     ss << "q_GYROtoI: " << q_GYROtoIMU.transpose() << std::endl;
     ss << "q_ACCtoI: " << q_ACCtoIMU.transpose() << std::endl;
+    PRINT_DEBUG(ss.str().c_str());
+    PRINT_DEBUG("FLS PARAMETERS:\n");
+    PRINT_DEBUG("  - calib_flsimu_dt: %.4f\n", calib_flsimu_dt)
+    ss.str("");
+    Eigen::Matrix4d T_StoI = Eigen::Matrix4d::Identity();
+    T_StoI.block(0, 0, 3, 3) = ov_core::quat_2_Rot(fls_extrinsics.block(0, 0, 4, 1)).transpose();
+    T_StoI.block(0, 3, 3, 1) = -T_StoI.block(0, 0, 3, 3) * fls_extrinsics.block(4, 0, 3, 1);    
+    ss << "  - T_StoI:" << std::endl << T_StoI << std::endl << std::endl;
     PRINT_DEBUG(ss.str().c_str());
   }
 
